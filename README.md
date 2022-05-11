@@ -13,7 +13,7 @@ and paging)
 
 documentation: <https://documenter.getpostman.com/view/3827865/UyxgJngH>
 
-api url: <>
+api url: <https://incident-api-nestjs.herokuapp.com/>
 
 ## Requirement
 
