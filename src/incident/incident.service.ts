@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { RaiseIncidentDto } from './dto/raise-incident.dto';
 import { AssignIncidentDto } from './dto/assign-incident.dto';
+import { UpdateIncidentStatusDto } from './dto/update-incident-status.dto';
+import { Status } from '@prisma/client';
 
 @Injectable()
 export class IncidentService {
@@ -120,6 +122,41 @@ export class IncidentService {
         creators: true,
       },
     });
+    return incident;
+  }
+
+  async updateIncidentStatus(
+    id: string,
+    updateIncidentStatusDto: UpdateIncidentStatusDto,
+  ): Promise<any> {
+    let incident = null;
+
+    const existingIncident = await this.prisma.incident.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (existingIncident) {
+      if (
+        (existingIncident.status === Status.NOT_STARTED &&
+          updateIncidentStatusDto.status === Status.ACKNOWLEDGE) ||
+        (existingIncident.status === Status.ACKNOWLEDGE &&
+          updateIncidentStatusDto.status === Status.RESOLVED)
+      ) {
+        incident = await this.prisma.incident.update({
+          where: {
+            id: id,
+          },
+          data: {
+            status: updateIncidentStatusDto.status,
+          },
+          include: {
+            creators: true,
+          },
+        });
+      }
+    }
+
     return incident;
   }
 

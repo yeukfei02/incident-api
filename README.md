@@ -11,7 +11,7 @@ features:
 and paging)
 - Delete an incident
 
-documentation: <>
+documentation: <https://documenter.getpostman.com/view/3827865/UyxgJngH>
 
 api url: <>
 
