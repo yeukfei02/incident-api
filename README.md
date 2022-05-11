@@ -1,5 +1,16 @@
 # incident-api
 
+features:
+
+- Raise an incident as an admin
+- Assign the incident to a user
+- Acknowledge the incident as a user
+- Resolve the incident as a user
+- Read details about a certain incident
+- Index incidents (includes filtering, sorting by date created/updated and incident type
+and paging)
+- Delete an incident
+
 documentation: <>
 
 api url: <>

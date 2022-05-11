@@ -1,4 +1,12 @@
-import { Controller, Post, Get, Body, Query, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Delete,
+  Body,
+  Query,
+  Param,
+} from '@nestjs/common';
 import { IncidentService } from './incident.service';
 import { RaiseIncidentDto } from './dto/raise-incident.dto';
 import { AssignIncidentDto } from './dto/assign-incident.dto';
@@ -63,6 +71,14 @@ export class IncidentController {
     const incident = await this.incidentService.getIncidentById(id);
 
     const response = { message: 'getIncidentById', incident: incident };
+    return response;
+  }
+
+  @Delete('/:id')
+  async deleteIncidentById(@Param('id') id: string): Promise<any> {
+    const incident = await this.incidentService.deleteIncidentById(id);
+
+    const response = { message: 'deleteIncidentById', incident: incident };
     return response;
   }
 }
