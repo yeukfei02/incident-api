@@ -30,7 +30,7 @@ model incident {
   status      Status   @default(NOT_STARTED)
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
-  users       users?   @relation(fields: [creator_id], references: [id])
+  creators    users?   @relation(fields: [creator_id], references: [id])
 
   @@index([name], map: "index_incident_on_name")
   @@index([type], map: "index_incident_on_type")

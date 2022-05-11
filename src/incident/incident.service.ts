@@ -28,12 +28,15 @@ export class IncidentService {
     return incident;
   }
 
-  async assignIncident(assignIncidentDto: AssignIncidentDto): Promise<any> {
+  async assignIncident(
+    id: string,
+    assignIncidentDto: AssignIncidentDto,
+  ): Promise<any> {
     let incident = null;
 
     const existingIncident = await this.prisma.incident.findUnique({
       where: {
-        id: assignIncidentDto.id,
+        id: id,
       },
     });
     if (
@@ -44,7 +47,7 @@ export class IncidentService {
       if (existingIncident.creator_id != assignIncidentDto.assignee_id) {
         incident = await this.prisma.incident.update({
           where: {
-            id: assignIncidentDto.id,
+            id: id,
           },
           data: {
             assignee_id: assignIncidentDto.assignee_id,
@@ -64,7 +67,7 @@ export class IncidentService {
   ): Promise<any> {
     let incidents = await this.prisma.incident.findMany({
       include: {
-        users: true,
+        creators: true,
       },
       skip: perPage * (page - 1),
       take: perPage,
@@ -79,7 +82,7 @@ export class IncidentService {
           creator_id: creatorId,
         },
         include: {
-          users: true,
+          creators: true,
         },
         skip: perPage * (page - 1),
         take: perPage,
@@ -95,7 +98,7 @@ export class IncidentService {
           assignee_id: assigneeId,
         },
         include: {
-          users: true,
+          creators: true,
         },
         skip: perPage * (page - 1),
         take: perPage,
@@ -114,7 +117,7 @@ export class IncidentService {
         id: id,
       },
       include: {
-        users: true,
+        creators: true,
       },
     });
     return incident;
@@ -126,7 +129,7 @@ export class IncidentService {
         id: id,
       },
       include: {
-        users: true,
+        creators: true,
       },
     });
     return incident;
