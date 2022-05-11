@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_PROD")
+}
+
+model users {
+  id         String     @id @default(uuid()) @db.Uuid
+  email      String?    @unique
+  is_admin   Boolean    @default(false)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @default(now())
+  incidents  incident[]
+
+  @@index([email], map: "index_users_on_email")
+  @@index([is_admin], map: "index_users_on_is_admin")
+  @@index([created_at], map: "index_users_on_created_at")
+  @@index([updated_at], map: "index_users_on_updated_at")
+}
+
+model incident {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String?
+  type        String?
+  creator_id  String?  @db.Uuid
+  assignee_id String?  @db.Uuid
+  status      Status   @default(NOT_STARTED)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+  users       users?   @relation(fields: [creator_id], references: [id])
+
+  @@index([name], map: "index_incident_on_name")
+  @@index([type], map: "index_incident_on_type")
+  @@index([creator_id], map: "index_incident_on_creator_id")
+  @@index([assignee_id], map: "index_incident_on_assignee_id")
+  @@index([status], map: "index_incident_on_status")
+  @@index([created_at], map: "index_incident_on_created_at")
+  @@index([updated_at], map: "index_incident_on_updated_at")
+}
+
+enum Status {
+  NOT_STARTED
+  ACKNOWLEDGE
+  RESOLVED
+}
