@@ -118,7 +118,7 @@ describe('IncidentService', () => {
       expect(incident.type).toBeDefined();
       expect(incident.status).toBeDefined();
       expect(incident.creator_id).toBeDefined();
-      expect(incident.assignee_id).toEqual(null);
+      expect(incident.assignee_id).toBeDefined();
       expect(incident.created_at).toBeDefined();
       expect(incident.updated_at).toBeDefined();
     });
