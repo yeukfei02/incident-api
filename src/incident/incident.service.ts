@@ -36,26 +36,20 @@ export class IncidentService {
   ): Promise<any> {
     let incident = null;
 
-    const existingIncident = await this.prisma.incident.findUnique({
+    const users = await this.prisma.users.findUnique({
       where: {
-        id: id,
+        id: assignIncidentDto.assignee_id,
       },
     });
-    if (
-      existingIncident &&
-      existingIncident.creator_id &&
-      !existingIncident.assignee_id
-    ) {
-      if (existingIncident.creator_id != assignIncidentDto.assignee_id) {
-        incident = await this.prisma.incident.update({
-          where: {
-            id: id,
-          },
-          data: {
-            assignee_id: assignIncidentDto.assignee_id,
-          },
-        });
-      }
+    if (users && !users.is_admin) {
+      incident = await this.prisma.incident.update({
+        where: {
+          id: id,
+        },
+        data: {
+          assignee_id: assignIncidentDto.assignee_id,
+        },
+      });
     }
 
     return incident;
