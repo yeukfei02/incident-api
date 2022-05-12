@@ -12,6 +12,7 @@ import { IncidentService } from './incident.service';
 import { RaiseIncidentDto } from './dto/raise-incident.dto';
 import { AssignIncidentDto } from './dto/assign-incident.dto';
 import { UpdateIncidentStatusDto } from './dto/update-incident-status.dto';
+import { Status } from '@prisma/client';
 
 @Controller('incident')
 export class IncidentController {
@@ -29,8 +30,8 @@ export class IncidentController {
 
   @Post('/:id/assign')
   async assignIncident(
-    @Body() assignIncidentDto: AssignIncidentDto,
     @Param('id') id: string,
+    @Body() assignIncidentDto: AssignIncidentDto,
   ): Promise<any> {
     const incident = await this.incidentService.assignIncident(
       id,
@@ -43,10 +44,15 @@ export class IncidentController {
 
   @Get()
   async getIncidents(
-    @Query('creator_id') creator_id: string,
-    @Query('assignee_id') assignee_id: string,
-    @Query('page') page: string,
-    @Query('per_page') perPage: string,
+    @Query('creator_id') creator_id?: string,
+    @Query('assignee_id') assignee_id?: string,
+    @Query('name') name?: string,
+    @Query('type') type?: string,
+    @Query('status') status?: Status,
+    @Query('page') page?: string,
+    @Query('per_page') perPage?: string,
+    @Query('sort_by') sortBy?: string,
+    @Query('sort_order_desc') sortOrderDesc?: string,
   ): Promise<any> {
     const creatorId = creator_id;
     const assigneeId = assignee_id;
@@ -56,8 +62,13 @@ export class IncidentController {
     const incidents = await this.incidentService.getIncidents(
       creatorId,
       assigneeId,
+      name,
+      type,
+      status,
       pageInt,
       perPageInt,
+      sortBy,
+      sortOrderDesc,
     );
 
     const response = {

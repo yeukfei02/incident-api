@@ -64,51 +64,104 @@ export class IncidentService {
   async getIncidents(
     creatorId: string,
     assigneeId: string,
+    name: string,
+    type: string,
+    status: Status,
     page: number,
     perPage: number,
+    sortBy: string,
+    sortOrderDesc: string,
   ): Promise<any> {
-    let incidents = await this.prisma.incident.findMany({
+    let orderBy = {};
+
+    const sortOrderStr =
+      sortOrderDesc && sortOrderDesc === 'true' ? 'desc' : 'asc';
+    console.log('sortOrderStr = ', sortOrderStr);
+
+    if (!sortBy) {
+      const newOrderBy = {
+        created_at: sortOrderStr,
+      };
+      orderBy = Object.assign(orderBy, newOrderBy);
+    } else {
+      if (sortBy === 'created_at') {
+        const newOrderBy = {
+          created_at: sortOrderStr,
+        };
+        orderBy = Object.assign(orderBy, newOrderBy);
+      } else if (sortBy === 'updated_at') {
+        const newOrderBy = {
+          updated_at: sortOrderStr,
+        };
+        orderBy = Object.assign(orderBy, newOrderBy);
+      } else if (sortBy === 'incident_type') {
+        const newOrderBy = {
+          type: sortOrderStr,
+        };
+        orderBy = Object.assign(orderBy, newOrderBy);
+      }
+    }
+
+    console.log('orderBy = ', orderBy);
+
+    let filterParams: any = {
       include: {
-        creators: true,
+        creator: true,
       },
       skip: perPage * (page - 1),
       take: perPage,
-      orderBy: {
-        created_at: 'desc',
-      },
-    });
+      orderBy: orderBy,
+    };
+
+    let whereParams = {};
 
     if (creatorId) {
-      incidents = await this.prisma.incident.findMany({
-        where: {
-          creator_id: creatorId,
-        },
-        include: {
-          creators: true,
-        },
-        skip: perPage * (page - 1),
-        take: perPage,
-        orderBy: {
-          created_at: 'desc',
-        },
-      });
+      const creatorFilterParams = {
+        creator_id: creatorId,
+      };
+      whereParams = Object.assign(whereParams, creatorFilterParams);
     }
 
     if (assigneeId) {
-      incidents = await this.prisma.incident.findMany({
-        where: {
-          assignee_id: assigneeId,
-        },
-        include: {
-          creators: true,
-        },
-        skip: perPage * (page - 1),
-        take: perPage,
-        orderBy: {
-          created_at: 'desc',
-        },
-      });
+      const assigneeFilterParams = {
+        assignee_id: assigneeId,
+      };
+      whereParams = Object.assign(whereParams, assigneeFilterParams);
     }
+
+    if (name) {
+      const nameFilterParams = {
+        name: name,
+      };
+      whereParams = Object.assign(whereParams, nameFilterParams);
+    }
+
+    if (type) {
+      const typeFilterParams = {
+        type: type,
+      };
+      whereParams = Object.assign(whereParams, typeFilterParams);
+    }
+
+    if (status) {
+      const statusFilterParams = {
+        status: status,
+      };
+      whereParams = Object.assign(whereParams, statusFilterParams);
+    }
+
+    console.log('whereParams = ', whereParams);
+
+    if (whereParams) {
+      whereParams = {
+        where: whereParams,
+      };
+      filterParams = Object.assign(filterParams, whereParams);
+    }
+
+    console.log('filterParams = ', filterParams);
+
+    const incidents = await this.prisma.incident.findMany(filterParams);
 
     return incidents;
   }
@@ -119,7 +172,7 @@ export class IncidentService {
         id: id,
       },
       include: {
-        creators: true,
+        creator: true,
       },
     });
     return incident;
@@ -151,7 +204,7 @@ export class IncidentService {
             status: updateIncidentStatusDto.status,
           },
           include: {
-            creators: true,
+            creator: true,
           },
         });
       }
@@ -166,7 +219,7 @@ export class IncidentService {
         id: id,
       },
       include: {
-        creators: true,
+        creator: true,
       },
     });
     return incident;
