@@ -32,7 +32,7 @@ describe('UsersService', () => {
       expect(users).toBeDefined();
       expect(users.id).toBeDefined();
       expect(users.email).toBeDefined();
-      expect(users.is_admin).toBeTruthy();
+      expect(users.is_admin).toBeDefined();
       expect(users.created_at).toBeDefined();
       expect(users.updated_at).toBeDefined();
     });
@@ -77,7 +77,7 @@ describe('UsersService', () => {
       expect(users).toBeDefined();
       expect(users.id).toBeDefined();
       expect(users.email).toBeDefined();
-      expect(users.is_admin).toBeTruthy();
+      expect(users.is_admin).toBeDefined();
       expect(users.created_at).toBeDefined();
       expect(users.updated_at).toBeDefined();
     });

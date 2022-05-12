@@ -28,6 +28,12 @@ describe('UsersController', () => {
         is_admin: true,
       };
       users = await controller.createUser(createUserDto);
+
+      const createUserDto2 = {
+        email: faker.internet.email(),
+        is_admin: false,
+      };
+      await controller.createUser(createUserDto2);
     });
 
     it('return success', async () => {

@@ -30,8 +30,8 @@ export class IncidentController {
 
   @Post('/:id/assign')
   async assignIncident(
-    @Body() assignIncidentDto: AssignIncidentDto,
     @Param('id') id: string,
+    @Body() assignIncidentDto: AssignIncidentDto,
   ): Promise<any> {
     const incident = await this.incidentService.assignIncident(
       id,
