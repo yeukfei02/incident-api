@@ -1,18 +1,74 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+import { PrismaService } from '../prisma.service';
+import { faker } from '@faker-js/faker';
 
 describe('UsersController', () => {
   let controller: UsersController;
+  let service: UsersService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [UsersController],
-    }).compile();
-
-    controller = module.get<UsersController>(UsersController);
+    const prismaService = new PrismaService();
+    service = new UsersService(prismaService);
+    controller = new UsersController(service);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  describe('controller should be defined', () => {
+    it('return success', () => {
+      expect(controller).toBeDefined();
+    });
+  });
+
+  describe('createUsers', () => {
+    let users: any = {};
+
+    beforeEach(async () => {
+      const createUserDto = {
+        email: faker.internet.email(),
+        is_admin: true,
+      };
+      users = await controller.createUser(createUserDto);
+    });
+
+    it('return success', async () => {
+      console.log('users = ', users);
+      expect(users).toBeDefined();
+      expect(users.message).toBeDefined();
+      expect(users.user).toBeDefined();
+    });
+  });
+
+  describe('getUsers', () => {
+    let users: any = {};
+
+    beforeEach(async () => {
+      users = await controller.getUsers('1', '20');
+    });
+
+    it('return success', async () => {
+      console.log('users = ', users);
+      expect(users).toBeDefined();
+      expect(users.message).toBeDefined();
+      expect(users.data).toBeDefined();
+    });
+  });
+
+  describe('getUserById', () => {
+    let users: any = {};
+
+    beforeEach(async () => {
+      const usersList = await controller.getUsers('1', '20');
+      if (usersList) {
+        const id = usersList.data[0].id;
+        users = await controller.getUserById(id);
+      }
+    });
+
+    it('return success', async () => {
+      console.log('users = ', users);
+      expect(users).toBeDefined();
+      expect(users.message).toBeDefined();
+      expect(users.user).toBeDefined();
+    });
   });
 });

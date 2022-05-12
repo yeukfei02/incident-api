@@ -10,14 +10,14 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto): Promise<any> {
     const users = await this.usersService.createUser(createUserDto);
 
-    const response = { message: 'createUser', users: users };
+    const response = { message: 'createUser', user: users };
     return response;
   }
 
   @Get()
   async getUsers(
-    @Query('page') page: string,
-    @Query('per_page') perPage: string,
+    @Query('page') page?: string,
+    @Query('per_page') perPage?: string,
   ): Promise<any> {
     const pageInt = page ? parseInt(page, 10) : 1;
     const perPageInt = page ? parseInt(perPage, 10) : 20;

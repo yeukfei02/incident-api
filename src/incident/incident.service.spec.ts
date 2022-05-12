@@ -1,18 +1,17 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { IncidentService } from './incident.service';
+import { PrismaService } from '../prisma.service';
 
 describe('IncidentService', () => {
   let service: IncidentService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [IncidentService],
-    }).compile();
-
-    service = module.get<IncidentService>(IncidentService);
+    const prismaService = new PrismaService();
+    service = new IncidentService(prismaService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('service should be defined', () => {
+    it('return success', () => {
+      expect(service).toBeDefined();
+    });
   });
 });

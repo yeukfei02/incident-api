@@ -44,15 +44,15 @@ export class IncidentController {
 
   @Get()
   async getIncidents(
-    @Query('creator_id') creator_id: string,
-    @Query('assignee_id') assignee_id: string,
-    @Query('name') name: string,
-    @Query('type') type: string,
-    @Query('status') status: Status,
-    @Query('page') page: string,
-    @Query('per_page') perPage: string,
-    @Query('sort_by') sortBy: string,
-    @Query('sort_order_desc') sortOrderDesc: string,
+    @Query('creator_id') creator_id?: string,
+    @Query('assignee_id') assignee_id?: string,
+    @Query('name') name?: string,
+    @Query('type') type?: string,
+    @Query('status') status?: Status,
+    @Query('page') page?: string,
+    @Query('per_page') perPage?: string,
+    @Query('sort_by') sortBy?: string,
+    @Query('sort_order_desc') sortOrderDesc?: string,
   ): Promise<any> {
     const creatorId = creator_id;
     const assigneeId = assignee_id;
