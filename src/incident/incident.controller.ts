@@ -12,6 +12,7 @@ import { IncidentService } from './incident.service';
 import { RaiseIncidentDto } from './dto/raise-incident.dto';
 import { AssignIncidentDto } from './dto/assign-incident.dto';
 import { UpdateIncidentStatusDto } from './dto/update-incident-status.dto';
+import { Status } from '@prisma/client';
 
 @Controller('incident')
 export class IncidentController {
@@ -45,7 +46,9 @@ export class IncidentController {
   async getIncidents(
     @Query('creator_id') creator_id: string,
     @Query('assignee_id') assignee_id: string,
+    @Query('name') name: string,
     @Query('type') type: string,
+    @Query('status') status: Status,
     @Query('page') page: string,
     @Query('per_page') perPage: string,
     @Query('sort_by') sortBy: string,
@@ -59,7 +62,9 @@ export class IncidentController {
     const incidents = await this.incidentService.getIncidents(
       creatorId,
       assigneeId,
+      name,
       type,
+      status,
       pageInt,
       perPageInt,
       sortBy,

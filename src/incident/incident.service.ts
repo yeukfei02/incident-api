@@ -64,7 +64,9 @@ export class IncidentService {
   async getIncidents(
     creatorId: string,
     assigneeId: string,
+    name: string,
     type: string,
+    status: Status,
     page: number,
     perPage: number,
     sortBy: string,
@@ -113,27 +115,39 @@ export class IncidentService {
 
     let whereParams = {};
 
-    if (creatorId || assigneeId || type) {
-      if (creatorId) {
-        const creatorFilterParams = {
-          creator_id: creatorId,
-        };
-        whereParams = Object.assign(whereParams, creatorFilterParams);
-      }
+    if (creatorId) {
+      const creatorFilterParams = {
+        creator_id: creatorId,
+      };
+      whereParams = Object.assign(whereParams, creatorFilterParams);
+    }
 
-      if (assigneeId) {
-        const assigneeFilterParams = {
-          assignee_id: assigneeId,
-        };
-        whereParams = Object.assign(whereParams, assigneeFilterParams);
-      }
+    if (assigneeId) {
+      const assigneeFilterParams = {
+        assignee_id: assigneeId,
+      };
+      whereParams = Object.assign(whereParams, assigneeFilterParams);
+    }
 
-      if (type) {
-        const typeFilterParams = {
-          type: type,
-        };
-        whereParams = Object.assign(whereParams, typeFilterParams);
-      }
+    if (name) {
+      const nameFilterParams = {
+        name: name,
+      };
+      whereParams = Object.assign(whereParams, nameFilterParams);
+    }
+
+    if (type) {
+      const typeFilterParams = {
+        type: type,
+      };
+      whereParams = Object.assign(whereParams, typeFilterParams);
+    }
+
+    if (status) {
+      const statusFilterParams = {
+        status: status,
+      };
+      whereParams = Object.assign(whereParams, statusFilterParams);
     }
 
     console.log('whereParams = ', whereParams);
