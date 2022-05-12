@@ -64,51 +64,90 @@ export class IncidentService {
   async getIncidents(
     creatorId: string,
     assigneeId: string,
+    type: string,
     page: number,
     perPage: number,
+    sortBy: string,
+    sortOrderDesc: string,
   ): Promise<any> {
-    let incidents = await this.prisma.incident.findMany({
+    let orderBy = {};
+
+    const sortOrderStr =
+      sortOrderDesc && sortOrderDesc === 'true' ? 'desc' : 'asc';
+    console.log('sortOrderStr = ', sortOrderStr);
+
+    if (!sortBy) {
+      const newOrderBy = {
+        created_at: sortOrderStr,
+      };
+      orderBy = Object.assign(orderBy, newOrderBy);
+    } else {
+      if (sortBy === 'created_at') {
+        const newOrderBy = {
+          created_at: sortOrderStr,
+        };
+        orderBy = Object.assign(orderBy, newOrderBy);
+      } else if (sortBy === 'updated_at') {
+        const newOrderBy = {
+          updated_at: sortOrderStr,
+        };
+        orderBy = Object.assign(orderBy, newOrderBy);
+      } else if (sortBy === 'incident_type') {
+        const newOrderBy = {
+          type: sortOrderStr,
+        };
+        orderBy = Object.assign(orderBy, newOrderBy);
+      }
+    }
+
+    console.log('orderBy = ', orderBy);
+
+    let filterParams: any = {
       include: {
         creator: true,
       },
       skip: perPage * (page - 1),
       take: perPage,
-      orderBy: {
-        created_at: 'desc',
-      },
-    });
+      orderBy: orderBy,
+    };
 
-    if (creatorId) {
-      incidents = await this.prisma.incident.findMany({
-        where: {
+    let whereParams = {};
+
+    if (creatorId || assigneeId || type) {
+      if (creatorId) {
+        const creatorFilterParams = {
           creator_id: creatorId,
-        },
-        include: {
-          creator: true,
-        },
-        skip: perPage * (page - 1),
-        take: perPage,
-        orderBy: {
-          created_at: 'desc',
-        },
-      });
+        };
+        whereParams = Object.assign(whereParams, creatorFilterParams);
+      }
+
+      if (assigneeId) {
+        const assigneeFilterParams = {
+          assignee_id: assigneeId,
+        };
+        whereParams = Object.assign(whereParams, assigneeFilterParams);
+      }
+
+      if (type) {
+        const typeFilterParams = {
+          type: type,
+        };
+        whereParams = Object.assign(whereParams, typeFilterParams);
+      }
     }
 
-    if (assigneeId) {
-      incidents = await this.prisma.incident.findMany({
-        where: {
-          assignee_id: assigneeId,
-        },
-        include: {
-          creator: true,
-        },
-        skip: perPage * (page - 1),
-        take: perPage,
-        orderBy: {
-          created_at: 'desc',
-        },
-      });
+    console.log('whereParams = ', whereParams);
+
+    if (whereParams) {
+      whereParams = {
+        where: whereParams,
+      };
+      filterParams = Object.assign(filterParams, whereParams);
     }
+
+    console.log('filterParams = ', filterParams);
+
+    const incidents = await this.prisma.incident.findMany(filterParams);
 
     return incidents;
   }
