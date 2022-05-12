@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/yeukfei02/incident-api/compare/v0.1.2...v0.1.3) (2022-05-12)
+
+
+### Bug Fixes
+
+* 🐛 fix assignIncident api ([d2a21b6](https://github.com/yeukfei02/incident-api/commit/d2a21b6852eaaab5a965f63e89628ab3e9f206df))
+* 🐛 fix test case ([fe8a2b9](https://github.com/yeukfei02/incident-api/commit/fe8a2b9a14d148eab7f95d15105d33d75bdd86ce))
+
 ### [0.1.2](https://github.com/yeukfei02/incident-api/compare/v0.1.1...v0.1.2) (2022-05-12)
 
 
