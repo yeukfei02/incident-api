@@ -69,7 +69,7 @@ export class IncidentService {
   ): Promise<any> {
     let incidents = await this.prisma.incident.findMany({
       include: {
-        creators: true,
+        creator: true,
       },
       skip: perPage * (page - 1),
       take: perPage,
@@ -84,7 +84,7 @@ export class IncidentService {
           creator_id: creatorId,
         },
         include: {
-          creators: true,
+          creator: true,
         },
         skip: perPage * (page - 1),
         take: perPage,
@@ -100,7 +100,7 @@ export class IncidentService {
           assignee_id: assigneeId,
         },
         include: {
-          creators: true,
+          creator: true,
         },
         skip: perPage * (page - 1),
         take: perPage,
@@ -119,7 +119,7 @@ export class IncidentService {
         id: id,
       },
       include: {
-        creators: true,
+        creator: true,
       },
     });
     return incident;
@@ -151,7 +151,7 @@ export class IncidentService {
             status: updateIncidentStatusDto.status,
           },
           include: {
-            creators: true,
+            creator: true,
           },
         });
       }
@@ -166,7 +166,7 @@ export class IncidentService {
         id: id,
       },
       include: {
-        creators: true,
+        creator: true,
       },
     });
     return incident;
