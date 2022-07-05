@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/yeukfei02/incident-api/compare/v0.1.3...v0.1.4) (2022-07-05)
+
+
+### Bug Fixes
+
+* 🐛 add node version in package.json ([f09dc47](https://github.com/yeukfei02/incident-api/commit/f09dc4784f52b948ccd6d87683060dc044bed1b3))
+* 🐛 update prisma lib ([5fef96e](https://github.com/yeukfei02/incident-api/commit/5fef96e7e5b4a7c43434d948ae1f1a2e100e8437))
+
 ### [0.1.3](https://github.com/yeukfei02/incident-api/compare/v0.1.2...v0.1.3) (2022-05-12)
 
 
